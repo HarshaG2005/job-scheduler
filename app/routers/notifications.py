@@ -4,10 +4,7 @@ from app import models, schemas
 from app.database import get_db
 from app.workers.notification_tasks import send_notification
 from fastapi import WebSocket
-from typing import Set
 import asyncio
-
-
 import uuid
 import json
 
@@ -49,17 +46,6 @@ async def get_user_notifications(user_id: int, db: Session = Depends(get_db)):
     ).all()
     
     return notifications
-# @router.websocket("/ws")
-# async def websocket_broadcast(websocket: WebSocket):
-#     await websocket.accept()
-#     await websocket.send_text("✅ Connection established!")
-
-#     try:
-#         while True:
-#             data = await websocket.receive_text()
-#             await websocket.send_text(f"Echo: {data}")
-#     except Exception as e:
-#         print(f"WebSocket closed: {e}")
 
 @router.get("/{notification_id}", response_model=schemas.NotificationResponse)
 async def get_notification(notification_id: str, db: Session = Depends(get_db)):
@@ -75,8 +61,6 @@ async def get_notification(notification_id: str, db: Session = Depends(get_db)):
     
     return notification
 
-#Store connected clients
-# connected_clients: Set[WebSocket] = set()
 
 @router.websocket("/ws/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, user_id: int):

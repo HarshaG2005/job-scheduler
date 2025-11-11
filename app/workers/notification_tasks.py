@@ -91,44 +91,26 @@ def send_email_notification(notification):
         raise Exception(f"Failed to send email to {to_email}")
 
 def send_sms_notification(notification):
-    """Send SMS - placeholder"""
-    logger.info(f"[SMS] To user {notification.user_id}: {notification.message}")
-    # TODO: Implement actual SMS sending
-
+    """Send SMS notification"""
+    from app.services.sms_service import send_sms
+    
+    # For now, use placeholder number
+    to_number = f"+1208826549{notification.user_id}"  # Test number format
+    
+    message = f"{notification.title}\n{notification.message}"
+    
+    success = send_sms(to_number, message)
+    
+    if success:
+        logger.info(f"[SMS] Sent to {to_number}")
+    else:
+        raise Exception(f"Failed to send SMS to {to_number}")
 
 def send_push_notification(notification):
     """Send push notification - placeholder"""
     logger.info(f"[PUSH] To user {notification.user_id}: {notification.title}")
     # TODO: Implement actual push sending
 
-
-
-# def send_in_app_notification(notification,connected_clients=None):
-#     """Send in-app notification via WebSocket"""
-#     logger.info(f"[IN-APP] To user {notification.user_id}: {notification.title}")
-#     # TODO: Implement WebSocket broadcast
-    
-    
-#     message = {
-#         "type": "notification",
-#         "title": notification.title,
-#         "message": notification.message,
-#         "user_id": notification.user_id
-#     }
-    
-#     # Broadcast to all connected clients
-#     disconnected = set()
-#     for client in connected_clients:
-#         try:
-#             asyncio.run(client.send_json(message))
-#         except Exception as e:
-#             disconnected.add(client)
-    
-#     # Remove disconnected clients
-#     for client in disconnected:
-#         connected_clients.discard(client)
-    
-#     logger.info(f"[IN-APP] Broadcast to {len(connected_clients)} clients")
 def send_in_app_notification(notification):
     """Send in-app notification via Redis Pub/Sub"""
     from app.services.redis_pubsub import redis_pubsub
