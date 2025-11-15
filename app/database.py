@@ -4,6 +4,10 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+DATABASE_URL = os.getenv("DATABASE_URL")  # Define first
+
+if not DATABASE_URL:  # Check if it exists
+    raise RuntimeError("DATABASE_URL not set")
 
 # DATABASE_URL = os.getenv("DATABASE_URL")
 
