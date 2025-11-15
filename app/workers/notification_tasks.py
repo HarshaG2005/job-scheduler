@@ -1,5 +1,5 @@
 from app.celery_app import app
-from app.database import SessionLocal
+from app.database import get_db, get_engine
 from app import models
 from app.services.metrics import (
     notifications_sent, 
