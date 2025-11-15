@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.database import engine
+#from app.database import engine
 from app import models
 from app.routers import notifications,users,auth
 from prometheus_client import generate_latest, CollectorRegistry, REGISTRY

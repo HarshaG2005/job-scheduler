@@ -1,0 +1,114 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: notifyx-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: notifyx-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # FastAPI Application
+  web:
+    build: .
+    container_name: notifyx-web
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    env_file: .env  # ← Automatically loads all variables from .env
+    environment:
+      # Override or add specific variables
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: redis://redis:6379/0
+      # These will be loaded from .env file automatically
+      # SECRET_KEY will come from .env
+      # SMTP_SERVER, SMTP_PORT, etc. from .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - notifyx-network
+
+  # Celery Worker
+  celery_worker:
+    build: .
+    container_name: notifyx-celery-worker
+    command: celery -A app.celery_app worker --loglevel=info --pool=solo
+    env_file: .env  # ← Automatically loads all variables from .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      PUSHGATEWAY_URL: ${PUSHGATEWAY_URL}
+      # Rest come from .env
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - notifyx-network
+
+  # Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: notifyx-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - notifyx-network
+
+  # Pushgateway
+  pushgateway:
+    image: prom/pushgateway:latest
+    container_name: notifyx-pushgateway
+    ports:
+      - "9091:9091"
+    volumes:
+      - pushgateway_data:/pushgateway
+    networks:
+      - notifyx-network
+
+networks:
+  notifyx-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  pushgateway_data:
