@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field,field_validator
+from pydantic import BaseModel, EmailStr, Field,field_validator,ConfigDict
 from typing import Optional, Dict, Any, List
 from datetime import datetime
 from enum import Enum
@@ -30,20 +30,21 @@ class UserCreate(BaseModel):
             raise ValueError('Password must be at least 8 characters long')
         return v
     
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "email": "user@example.com",
-                "phone": "+1234567890",
-                "full_name": "John Doe",
-                "preferences": {
-                    "email": True,
-                    "sms": False,
-                    "push": True,
-                    "in_app": True
-                }
+    model_config = ConfigDict(
+    json_schema_extra={
+        "example": {
+            "email": "user@example.com",
+            "phone": "+1234567890",
+            "full_name": "John Doe",
+            "preferences": {
+                "email": True,
+                "sms": False,
+                "push": True,
+                "in_app": True
             }
         }
+    }
+    )
 
 class UserUpdate(BaseModel):
     phone: Optional[str] = None
@@ -61,8 +62,7 @@ class UserResponse(BaseModel):
     created_at: datetime
     updated_at: Optional[datetime]
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # ============= NOTIFICATION SCHEMAS =============
 
@@ -71,18 +71,18 @@ class NotificationCreate(BaseModel):
     title: str = Field(..., min_length=1, max_length=200)
     message: str = Field(..., min_length=1)
     channels: List[str] = Field(..., min_items=1)
-   # metadata: Optional[Dict[str, Any]] = {}
+   
     
-    class Config:
+    model_config= ConfigDict(
         json_schema_extra = {
             "example": {
                 "user_id": 1,
                 "title": "Welcome!",
                 "message": "Welcome to our platform",
-                "channels": ["email", "in_app"],
-                "metadata": {"campaign": "onboarding"}
+                "channels": ["email", "in_app"]
+                
             }
-        }
+        })
 
 class NotificationResponse(BaseModel):
     id: str
@@ -94,8 +94,7 @@ class NotificationResponse(BaseModel):
     created_at: datetime
     sent_at: Optional[datetime]
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # ============= LOGIN SCHEMAS =============
 
