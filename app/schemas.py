@@ -91,7 +91,6 @@ class NotificationResponse(BaseModel):
     message: str
     channels: List[str]
     status: NotificationStatus
-    #metadata: Dict[str, Any]
     created_at: datetime
     sent_at: Optional[datetime]
     
