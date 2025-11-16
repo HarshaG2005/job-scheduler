@@ -14,7 +14,6 @@ SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
 
 def send_email(to_email: str, subject: str, body: str) -> bool:
     """Send email via Gmail SMTP"""
-    
     try:
         # Create message
         message = MIMEMultipart()
