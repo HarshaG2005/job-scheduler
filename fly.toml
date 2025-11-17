@@ -1,22 +1,26 @@
-# fly.toml app configuration file generated for notifyx on 2025-11-17T14:09:42+05:30
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
+# fly.toml app configuration file generated for notifyx
 
-app = 'notifyx'
-primary_region = 'sin'
+app = "notifyx"
+primary_region = "sin"
 
 [build]
 
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = 'stop'
+  auto_stop_machines = "stop"
   auto_start_machines = true
   min_machines_running = 0
-  processes = ['app']
+  processes = ["app"]
+
+[processes]
+  # Your FastAPI API
+  app = "uvicorn main:app --host 0.0.0.0 --port 8080"
+
+  # Your Celery worker (modify path if needed)
+  worker = "celery -A app.celery_app worker --loglevel=info --pool=solo"
 
 [[vm]]
-  memory = '512mb'
-  cpu_kind = 'shared'
+  memory = "512mb"
+  cpu_kind = "shared"
   cpus = 1
