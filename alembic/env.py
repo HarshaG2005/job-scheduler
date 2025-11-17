@@ -8,7 +8,13 @@ from sqlalchemy import pool
 from alembic import context
 from app.models import Base 
 
-DATABASE_URL= os.getenv("DATABASE_URL")
+# Load Fly DATABASE_URL
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# Fix for SQLAlchemy 2.x
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
+
 
 
 # this is the Alembic Config object, which provides
