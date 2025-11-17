@@ -1,24 +1,35 @@
-
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = os.getenv("DATABASE_URL")  # Define first
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-if not DATABASE_URL:  # Check if it exists
+if not DATABASE_URL:
     raise RuntimeError("DATABASE_URL not set")
 
-# THEN do lazy loading - DON'T create engine here
+# Fix for Fly.io Postgres URLs (postgres:// -> postgresql+psycopg://)
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
+
+# Lazy loading pattern
 _engine = None
 
 def get_engine():
     global _engine
     if _engine is None:
-        _engine = create_engine(DATABASE_URL, pool_pre_ping=True, pool_recycle=3600)
+        _engine = create_engine(
+            DATABASE_URL, 
+            pool_pre_ping=True, 
+            pool_recycle=3600
+        )
     return _engine
 
 def get_db():
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=get_engine())
+    SessionLocal = sessionmaker(
+        autocommit=False, 
+        autoflush=False, 
+        bind=get_engine()
+    )
     db = SessionLocal()
     try:
         yield db
