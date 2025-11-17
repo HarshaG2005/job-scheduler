@@ -24,12 +24,13 @@ def get_engine():
         )
     return _engine
 
-def get_db():
-    SessionLocal = sessionmaker(
+SessionLocal = sessionmaker(
         autocommit=False, 
         autoflush=False, 
         bind=get_engine()
     )
+def get_db():
+    
     db = SessionLocal()
     try:
         yield db
