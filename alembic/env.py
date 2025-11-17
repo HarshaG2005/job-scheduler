@@ -7,15 +7,15 @@ from sqlalchemy import pool
 
 from alembic import context
 from app.models import Base 
-load_dotenv()
-db_url= os.getenv("DATABASE_URL")
+
+DATABASE_URL= os.getenv("DATABASE_URL")
 
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 config.set_main_option(
-    'sqlalchemy.url', db_url
+    'sqlalchemy.url', DATABASE_URL
 )
 
 # Interpret the config file for Python logging.
