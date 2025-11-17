@@ -12,6 +12,8 @@ import json
 from app.services.email_service import send_email
 import asyncio
 from datetime import datetime
+from app.database import SessionLocal
+
 import logging
 
 logging.basicConfig(level=logging.INFO)
