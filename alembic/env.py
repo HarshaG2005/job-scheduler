@@ -7,7 +7,7 @@ from sqlalchemy import pool
 
 from alembic import context
 from app.models import Base 
-
+load_dotenv()
 # Load Fly DATABASE_URL
 DATABASE_URL = os.getenv("DATABASE_URL")
 
