@@ -50,7 +50,7 @@ NotifyX lets you send notifications across multiple channels while respecting us
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/notifyx.git
+git clone https://github.com/HarshaG2005/NotifyX.git
 cd notifyx
 ```
 
