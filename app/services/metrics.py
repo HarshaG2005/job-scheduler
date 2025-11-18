@@ -2,7 +2,7 @@ from prometheus_client import Counter, Histogram, Gauge, CollectorRegistry, push
 import os
 import logging
 
-# Configure logging properly
+# Configure logging 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ def push_metrics():
             logger.info(f"      {sample.name}{sample.labels} = {sample.value}")
     
     try:
-        logger.info("⏳ Pushing to Pushgateway...")
+        logger.info(" Pushing to Pushgateway...")
         push_to_gateway(
             pushgateway_url, 
             job='celery_workers',

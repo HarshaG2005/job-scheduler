@@ -42,7 +42,7 @@ class Notification(Base):
     __tablename__ = "notifications"
     
     id = Column(String, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)  # Fixed!
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)  
     title = Column(String, nullable=False)
     message = Column(String, nullable=False)
     channels = Column(JSON, nullable=False)  # ["email", "sms", "push", "in_app"]

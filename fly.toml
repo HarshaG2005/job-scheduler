@@ -15,10 +15,10 @@ primary_region = "sin"
   processes = ["app"]
 
 [processes]
-  # Your FastAPI API
+  # FastAPI API
   app = "uvicorn app.main:app --host 0.0.0.0 --port 8080"
 
-  # Your Celery worker (modify path if needed)
+  # Celery worker 
   worker = "celery -A app.celery_app worker --loglevel=info --pool=solo"
 
 [[vm]]

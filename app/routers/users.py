@@ -35,8 +35,6 @@ def create_user(request: Request,user: UserCreate, db: Session = Depends(get_db)
     
     user_data['password'] = hash(user_data['password'])  # Hash it
     
-    # Convert Pydantic model to dict, handling preferences
-    
     if user_data.get('preferences'):
         user_data['preferences'] = user_data['preferences'].model_dump() if hasattr(user_data['preferences'], 'model_dump') else user_data['preferences']
     

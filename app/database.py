@@ -7,7 +7,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise RuntimeError("DATABASE_URL not set")
 
-# Fix for Fly.io Postgres URLs (postgres:// -> postgresql+psycopg://)
+# Fly.io Postgres URLs (postgres:// -> postgresql+psycopg://)
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
 

@@ -90,7 +90,7 @@ def send_notification(self, notification_id: str):
     
     except Exception as exc:
         logger.error(f"Notification {notification.id} failed: {str(exc)}")
-        notifications_sent.labels(channel="unknown", status="failed").inc()
+       # notifications_sent.labels(channel="unknown", status="failed").inc()
         pending_notifications.dec()
         logger.info("[ERROR PATH] About to push metrics...")
         push_metrics()  # ← Push metrics even on failure
@@ -102,7 +102,7 @@ def send_notification(self, notification_id: str):
             raise self.retry(exc=exc, countdown=backoff)
         else:
             notification.status = "failed"
-            notifications_sent.labels(channel="unknown", status="failed").inc()
+            notifications_sent.labels(channel=channel, status="failed").inc()
             db.commit()
             logger.error(f"Notification {notification.id} failed after retries")
     
