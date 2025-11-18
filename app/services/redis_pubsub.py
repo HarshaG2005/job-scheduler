@@ -30,4 +30,4 @@ class RedisPubSub:
         return pubsub
 
 # Global instance
-redis_pubsub = RedisPubSub()
+redis_pubsub = RedisPubSub(REDIS_URL)
