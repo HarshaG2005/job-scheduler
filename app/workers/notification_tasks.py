@@ -67,7 +67,7 @@ def send_notification(self, notification_id: str):
                 notifications_sent.labels(channel=channel, status="success").inc()
                 notification_duration.labels(channel=channel).observe(time.time() - channel_start)
             except Exception as channel_error:
-                notifications_sent.labels(channel=channel, status="failed").inc()
+                #notifications_sent.labels(channel=channel, status="failed").inc()
                 logger.warning(f"Failed to send via {channel}: {str(channel_error)}")
                 raise channel_error
                 
