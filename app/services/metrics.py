@@ -35,7 +35,7 @@ def push_metrics():
     pushgateway_url = os.getenv("PUSHGATEWAY_URL", "localhost:9091")
     
     # Remove http:// or https:// if present
-    pushgateway_url = pushgateway_url.replace("http://", "").replace("https://", "")
+   # pushgateway_url = pushgateway_url.replace("http://", "").replace("https://", "")
     
     logger.info("=" * 60)
     logger.info("PUSH METRICS CALLED")
