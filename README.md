@@ -51,7 +51,7 @@ NotifyX lets you send notifications across multiple channels while respecting us
 
 ```bash
 git clone https://github.com/HarshaG2005/NotifyX.git
-cd notifyx
+cd NotifyX
 ```
 
 ### 2. Environment Setup
