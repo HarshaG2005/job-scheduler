@@ -14,7 +14,6 @@ A multi-channel notification service built with FastAPI, Celery, and PostgreSQL.
 
 NotifyX lets you send notifications across multiple channels while respecting user preferences. It handles async processing, retries failed deliveries, and provides real-time status updates via WebSockets.
 
-**Live Demo**: [notifyx.fly.dev](https://notifyx.fly.dev) 
 
 ## ✨ Features
 
@@ -276,7 +275,17 @@ alembic revision --autogenerate -m "Add new column"
 alembic upgrade head
 ```
 
-## 🚀 Deployment
+## 🚀 Deployment(Currently Offline)
+
+This project was previously deployed for testing purposes.
+Currently runs locally via Docker Compose.
+
+## Local Deployment(docker-compose)
+
+```bash
+docker-compose up --build
+```
+
 
 ### Deploy to Fly.io
 
